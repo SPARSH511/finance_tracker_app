@@ -271,6 +271,8 @@ def generate_forecast(spending_df, income_df=None, forecast_periods=12):
         savings_data = calculate_savings_rate(spending_df, income_df)
         if savings_data:
             results['savings_analysis'] = savings_data
+
+    print(results)
     
     return results
 
