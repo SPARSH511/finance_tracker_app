@@ -3,7 +3,6 @@ from flask_cors import CORS
 import pandas as pd
 import numpy as np
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
-import google.generativeai as genai
 import os
 import tempfile
 import json
@@ -752,5 +751,6 @@ if __name__ == '__main__':
         save_cache({})
     
     # Start the Flask app
-    port = int(os.environ.get("PORT", 5000))
-    app.run(debug=False, host='0.0.0.0', port=port)
+    # port = int(os.environ.get("PORT", 5000))
+    # app.run(debug=False, host='0.0.0.0', port=port)
+    app.run()
