@@ -10,6 +10,12 @@ import json
 from datetime import datetime, timedelta
 import logging
 from io import StringIO
+# Using requests library from Python and Groq API URL
+import requests
+
+# Configure Groq API key and url
+GROQ_API_KEY = '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'
+GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -18,13 +24,24 @@ CORS(app)  # Enable CORS for all routes
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# Configure Gemini AI
-GEMINI_API_KEY = "AIzaSyBsCeTkekViD7qFma8TfWZSvfwrL0sUpmE"
-genai.configure(api_key=GEMINI_API_KEY)
-
 # Constants
 ALLOWED_CATEGORIES = ['dining', 'shopping', 'groceries', 'entertainment', 'travel', 'utilities', 'misc']
 CACHE_FILE = 'spending_forecast_cache.json'
+
+def generate_response(prompt):
+    headers = {
+        'Authorization': f'Bearer {GROQ_API_KEY}',
+    }
+    payload = {
+        "model": "deepseek-r1-distill-llama-70b",
+        "messages": [
+            {"role": "user", "content": prompt}
+        ]
+    }
+    response = requests.post(GROQ_API_URL, headers=headers,json=payload)
+    response_text = response.json()['choices'][0]['message']['content'].strip()
+
+    return response_text
 
 def load_cache():
     if os.path.exists(CACHE_FILE):
@@ -271,8 +288,6 @@ def generate_forecast(spending_df, income_df=None, forecast_periods=12):
         savings_data = calculate_savings_rate(spending_df, income_df)
         if savings_data:
             results['savings_analysis'] = savings_data
-
-    print(results)
     
     return results
 
@@ -344,15 +359,14 @@ Be practical and explain like a financial expert. Provide actionable recommendat
         prompt += f"\nAdditionally, address this specific question from the user: {user_query}"
     
     try:
+
         # Request insights from Gemini
-        model = genai.GenerativeModel('gemini-1.5-flash')
-        response = model.generate_content(prompt)
-        
-        # Process and return the insights
-        insights = response.text
-        return insights
+        # model = genai.GenerativeModel('gemini-1.5-flash')
+        response = generate_response(prompt)
+        return response
+
     except Exception as e:
-        logger.error(f"Error generating insights: {str(e)}")
+        logger.error(f"Error generating insights: {e}")
         return "Unable to generate insights due to an error. Please try again later."
 
 @app.route("/")
