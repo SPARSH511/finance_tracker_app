@@ -17,7 +17,15 @@ GROQ_API_KEY = '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'
 GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+
+# More specific CORS configuration
+CORS(app, resources={
+    r"/api/*": {
+        "origins": "*",
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"]
+    }
+})
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -358,12 +366,8 @@ Be practical and explain like a financial expert. Provide actionable recommendat
         prompt += f"\nAdditionally, address this specific question from the user: {user_query}"
     
     try:
-
-        # Request insights from Gemini
-        # model = genai.GenerativeModel('gemini-1.5-flash')
         response = generate_response(prompt)
         return response
-
     except Exception as e:
         logger.error(f"Error generating insights: {e}")
         return "Unable to generate insights due to an error. Please try again later."
