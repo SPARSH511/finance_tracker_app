@@ -11,10 +11,13 @@ import logging
 from io import StringIO
 # Using requests library from Python and Groq API URL
 import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Configure Groq API key and url
-GROQ_API_KEY = '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'
-GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GROQ_API_URL = os.getenv("GROQ_API_URL")
 
 app = Flask(__name__)
 
