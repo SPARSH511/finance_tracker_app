@@ -20,7 +20,6 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_API_URL = os.getenv("GROQ_API_URL")
 
 app = Flask(__name__)
-app.config['HOST'] = '0.0.0.0'
 
 # More specific CORS configuration
 CORS(app, resources={
@@ -762,4 +761,4 @@ if __name__ == '__main__':
     
     # Start the Flask app
     port = int(os.environ.get("PORT", 5000))
-    app.run(debug=False,host="0.0.0.0",port=port)
+    app.run(debug=False,host="localhost",port=port)
