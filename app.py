@@ -20,6 +20,7 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_API_URL = os.getenv("GROQ_API_URL")
 
 app = Flask(__name__)
+app.config['HOST'] = '0.0.0.0'
 
 # More specific CORS configuration
 CORS(app, resources={
@@ -36,7 +37,9 @@ logger = logging.getLogger(__name__)
 
 # Constants
 ALLOWED_CATEGORIES = ['dining', 'shopping', 'groceries', 'entertainment', 'travel', 'utilities', 'misc']
-CACHE_FILE = 'spending_forecast_cache.json'
+
+# Update cache file path to use tmp directory
+CACHE_FILE = os.path.join(tempfile.gettempdir(), 'spending_forecast_cache.json')
 
 def generate_response(prompt):
     headers = {
