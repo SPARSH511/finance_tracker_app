@@ -48,7 +48,8 @@ def generate_response(prompt):
         "model": "deepseek-r1-distill-llama-70b",
         "messages": [
             {"role": "user", "content": prompt}
-        ]
+        ],
+        "reasoning_format" : "hidden"
     }
     response = requests.post(GROQ_API_URL, headers=headers,json=payload)
     response_text = response.json()['choices'][0]['message']['content'].strip()
