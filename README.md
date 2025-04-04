@@ -10,4 +10,4 @@ Tech Stack - Python (Flask), HTML, CSS (Tailwind) and JavaScript.
 
 Check out at : https://finance-tracker-app-upph.onrender.com/
 
-(Service suspended for now for safety reasons) 
+(Service suspended for now) 
